@@ -3,13 +3,16 @@
 #constants for the program
 isPartTime=1
 isFullTime=2
-maxHrsInMonth=10
+maxHrsInMonth=4
 empRatePerHr=20
 numWorkingDays=20
 
 #VARIABLES
-totalEmpHrs=0
+totalWorkHrs=0
 totalWorkingDays=0
+
+declare -A empDailyWage
+
 
 function getWorkingHours() {
       case $1 in
@@ -38,8 +41,9 @@ do
 		((totalWorkingDays++))
 		workHrs="$( getWorkingHours $((RANDOM%3)) )"
 		totalWorkHrs=$(($totalWorkHrs+$workHrs))
-		empDailyWage[$tatalWorkingDays]="$( calcDailyWage $workHrs )"
+		empDailyWage["Day" "$totalWorkingDays"]="$( calcDailyWage $workHrs )"
 done
 
-totalSalary="$(($totalWorkHrs*$empRatePerHr))"
+totalSalary="$( calcDailyWage $totalWorkHrs )"
 echo "Daily wage " ${empDailyWage[@]}
+echo "All Keys " ${!empDailyWage[@]}
